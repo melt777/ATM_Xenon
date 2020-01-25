@@ -8,8 +8,10 @@
 
 // Argon e00fce688527f71c9ee9b0ef Name: 74zen
 // Xenon e00fce689e3f887405d2cc19 Name: 74zen can 3
+// Xenon e00fce68a74b2b49af258ea2 Name 74 Zen can 4 ?
 // burned xenon : e00fce68914fed94fc726d72  can 1 
 // burned xenon : e00fce68a755ca49156869fd can 2
+
 
 // Argon e00fce6883727dbb74be0c13 Name: Metal tech gateway
 // Xenon e00fce6803061a4e7f19572a Name: Metal tech can 1
@@ -24,7 +26,7 @@ float value = analogRead(A0); // variable
 float EM_BEACON1_BATT = 0 ;
 float EM_BEACON2_BATT = 0;
 
-Timer timer(200000, timerUbidotInformation);// 5min timer to send info to ubidots
+Timer timer(1000000, timerUbidotInformation);// 5min timer to send info to ubidots
 //*******************************************************************
 //BLE 
 #define SCAN_RESULT_COUNT 30
@@ -57,7 +59,7 @@ void Name_of_Device(const char *topic, const char *data) {
   Serial.printlnf("variable label  that is copied from dev_name : %s", VARIABLE_LABEL);
   float voltage = analogRead(BATT) * 0.0011224;
   Particle.publish("voltage", String::format("%.2f",voltage), PRIVATE);
-    ubidots.add(VARIABLE_LABEL, voltage); //pair Vbatt with name of Xenon
+  ubidots.add(VARIABLE_LABEL, voltage); //pair Vbatt with name of Xenon
   Serial.printlnf("variable label that is uploaded to ubidots :  %s", VARIABLE_LABEL);
   ubidots.meshPublishToUbidots("Ubidots"); // webhook its publishing to on particle consol
 
@@ -126,20 +128,16 @@ void loop() {
 
 void timerUbidotInformation(void){
   
-  
- //
-  float voltage = analogRead(BATT) * 0.0011224;
- // Particle.publish("voltage", String::format("%.2f",voltage), PRIVATE);
-  // get the device name    
-  
-   waitUntil(Particle.connected);
+ float voltage = analogRead(BATT) * 0.0011224;
+ Particle.publish("voltage", String::format("%.2f",voltage), PRIVATE);
+ //get the device name    
+  waitUntil(Particle.connected);
   Particle.subscribe("particle/device/name", Name_of_Device);
   softDelay(3000);
   Particle.publish("particle/device/name");  // ask the cloud for the name to be sent to you
- //  softDelay(10000);
- // ubidots.add(VARIABLE_LABEL, voltage); //pair Vbatt with name of Xenon
- // Serial.printlnf("variable label that is uploaded to ubidots :  %s", VARIABLE_LABEL);
-  //ubidots.meshPublishToUbidots("Ubidots"); // webhook its publishing to on particle consol
+ ubidots.add(VARIABLE_LABEL, voltage); //pair Vbatt with name of Xenon
+ Serial.printlnf("variable label that is uploaded to ubidots :  %s", VARIABLE_LABEL);
+ ubidots.meshPublishToUbidots("Ubidots"); // webhook its publishing to on particle consol
   
 
 }

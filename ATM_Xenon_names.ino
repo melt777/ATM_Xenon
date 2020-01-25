@@ -107,12 +107,10 @@ void setup() {
   BLE.setTxPower(-8); // Use lower power // Use lower power -20, -16, -12, -8, -4, 0, 4, 8.
   //Remote Reset Particle Function, to reset device from the cloud
   Particle.function("reset", cloudResetFunction);//Remote Reset Particle Function, to reset device from the cloud
- timer.start(); // start timer to send info to ubidots once per hour or whatever its set to
-
-
-
+  timer.start(); // start timer to send info to ubidots once per hour or whatever its set to
   Mesh.subscribe("Detonate", DetonateAction);
   pinMode(BATT, INPUT);
+  ubidots.setDebug(true);  // Uncomment this line for printing debug messages
 
 
 }
@@ -129,7 +127,7 @@ void timerUbidotInformation(void){
   float voltage = analogRead(BATT) * 0.0011224;
   Particle.publish("voltage", String::format("%.2f",voltage), PRIVATE);
   // get the device name    
-   waitUntil(Particle.connected);
+  waitUntil(Particle.connected);
   Particle.subscribe("particle/device/name", Name_of_Device);
   softDelay(3000);
   Particle.publish("particle/device/name");  // ask the cloud for the name to be sent to you
