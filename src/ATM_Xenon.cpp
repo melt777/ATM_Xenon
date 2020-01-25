@@ -106,16 +106,19 @@ void DetonateAction(const char *event, const char *data){
     
    if (strcmp (data, "Boom")==0){ 
       softDelay(3000);// wait 3 seconds 
-      digitalWrite (led2, HIGH);
+      digitalWrite (NCH1, HIGH);//on
+      digitalWrite (PCH1, HIGH);//on
+      delay(500);
+      digitalWrite (NCH1, LOW);//off
+      digitalWrite (PCH1, LOW);//off
       DetonateSatus=1; // shows it has detonated
-     
-      Particle.publish("BOOM!",PRIVATE);
+      //Particle.publish("BOOM!",PRIVATE);
       Mesh.publish ("Detonate_ack","Boom_ack"); // publish to all subscriber to detonate
       softDelay(3000);
     }
    //Serial.println (data);
     if (strcmp (data, "Boom_reset")==0){  // turn led off as well as detonator voltage
-      digitalWrite (led2, LOW);
+      digitalWrite (led_red, LOW);
       DetonateSatus=1; // shows it has detonated
       Particle.publish("BOOM_reset",PRIVATE);
       softDelay(2000);
