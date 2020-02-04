@@ -41,6 +41,8 @@ const int led_blue= D7;
 int buttonLOAD;//hold button load value
 int buttonCLEAR;//hold button clear value
 
+SYSTEM_MODE(AUTOMATIC);
+
 // Ubidots *******************************************************************
 //Ubidots ubidots(UBIDOTS_TOKEN, UBI_INDUSTRIAL, UBI_MESH);
 const char* WEBHOOK_NAME = "Ubidots";
@@ -133,7 +135,7 @@ int cloudResetFunction(String command){
 }
 
 void setup() {
-  SYSTEM_MODE(AUTOMATIC);
+  
   Particle.keepAlive(20);
   timer.start(); // start timer to send info to ubidots once per hour or whatever its set to
   Serial.begin(115200);
